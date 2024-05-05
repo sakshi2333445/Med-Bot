@@ -40,7 +40,7 @@ Contributions to the project are welcome! If you have ideas for improvements or 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgements
-- The Llama 2 development team for providing an excellent language model.
+- The Llama 2 development team and hugging face platform for providing an excellent language model.
 - The Chainlit team for their conversational AI platform.
 - Contributors to open-source libraries and tools used in this project.
 
