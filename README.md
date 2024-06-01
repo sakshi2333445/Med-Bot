@@ -13,8 +13,8 @@ To utilize the medical chatbot, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Install the required dependencies as specified in the `requirements.txt` file.
-3. Configure the Faiss vector store path in the code (`DB_FAISS_PATH` constant).
-4. Run the main script to initialize the chatbot.
+3. Download the llama2 model from https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/blob/main/llama-2-7b-chat.ggmlv3.q8_0.bin .
+4. To initialize the chatbot run the following command in the same directory - chainlit run model.py -w.
 5. Interact with the chatbot by providing natural language queries or describing symptoms.
 
 ## Flow Description

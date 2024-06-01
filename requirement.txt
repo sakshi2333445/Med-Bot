@@ -1,6 +1,0 @@
-pypdf                
-langchain            
-        
-transformers 
-sentence_transformers         
-faiss_cpu           

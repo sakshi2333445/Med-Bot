@@ -4,6 +4,11 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.llms import CTransformers
 from langchain.chains import RetrievalQA 
 import chainlit as cl
+import re
+import nltk
+from nltk.corpus import words  # Import a list of English words
+
+nltk.download('words')
 
 DB_FAISS_PATH = "vectorstores/db_faiss"
 
@@ -27,7 +32,7 @@ def load_llm():
     llm = CTransformers(
         model = "llama-2-7b-chat.ggmlv3.q8_0.bin",
         model_type = "llama",
-        max_new_token = 512, #max no of new token
+        max_new_token = 512, #max no of new token (output length)
         temperature = 0.5 #randomness of model
     )
     
@@ -47,7 +52,7 @@ def retrieval_qa_chain(llm,prompt,db):
 
 
 def qa_bot():
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",model_kwargs = {'device':'cpu'})
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",model_kwargs = {'device':'cuda'})
     
     db = FAISS.load_local(DB_FAISS_PATH,embeddings,allow_dangerous_deserialization=True)
     llm = load_llm()
@@ -79,6 +84,13 @@ async def start():
 @cl.on_message
 async def main(message):
     chain = cl.user_session.get("chain")
+    
+    user_input = message.content.strip()
+
+    if not is_valid_query(user_input):  # Check if input is valid
+        await cl.Message(content="Nothing matched. Please enter a valid query.").send()
+        return
+
     cb = cl.AsyncLangchainCallbackHandler(
         stream_final_answer = True,answer_prefix_tokens = ["FINAL ANSWER"]
     )
@@ -88,6 +100,11 @@ async def main(message):
     answer = res["result"]
     sources = res["source_documents"]
     
+
+    if not answer:
+        await cl.Message(content="No information found for your query.").send()
+        return
+    
     '''To add source information in chatbot's output'''
     # if sources :
     #     answer += f"\n Sources:" + str(sources)
@@ -95,4 +112,18 @@ async def main(message):
     #     answer += f"\n No sources found "
         
     await cl.Message(content=answer).send()
+
+
+
+def is_valid_query(query):
+
+    # Check if the query is empty or contains only whitespace
+    if not query or query.isspace():
+        return False
     
+    # Check if the query contains only special characters
+    if not re.search(r'[a-zA-Z0-9]', query):
+        return False
+    
+    
+    return True    
