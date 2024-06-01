@@ -36,8 +36,6 @@ The codebase follows a structured flow:
 ## Contributing
 Contributions to the project are welcome! If you have ideas for improvements or new features, feel free to fork the repository, make your changes, and submit a pull request. Please adhere to the existing coding style and guidelines.
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgements
 - The Llama 2 development team and hugging face platform for providing an excellent language model.
